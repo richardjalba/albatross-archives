@@ -18,13 +18,14 @@ const getCurrentDay = () => {
 const currentYear = new Date().getFullYear();
 const currentMonth = getCurrentMonth();
 const currentDay = getCurrentDay();
-const currentDate = `${currentMonth}/${currentDay}/${currentYear} `;
-const lastYear = `${currentMonth}/${currentDay}/${currentYear - 1} `;
-const nextYear = `${currentMonth}/${currentDay}/${currentYear + 1} `;
-console.log(currentDate);
+const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+const lastYear = `${currentYear - 1}-${currentMonth}-${currentDay}`;
+const nextYear = `${currentYear + 1}-${currentMonth}-${currentDay}`;
 
 const popular_games = `games?dates=${lastYear},${currentDate}&ordering=-rating&page_size=20`;
-const upcoming_games = `games?dates=${nextYear},${currentDate}&ordering=-rating&page_size=20`;
+const upcoming_games = `games?dates=${currentDate},${nextYear}&ordering=-added&page_size=20`;
 
-export const popularGamesURL = () => `${base_url}${popular_games}`;
-export const upcomingGamesURL = () => `${base_url}${upcoming_games}`;
+const popularGamesURL = () => `${base_url}${popular_games}`;
+const upcomingGamesURL = () => `${base_url}${upcoming_games}`;
+
+console.log(upcomingGamesURL());
