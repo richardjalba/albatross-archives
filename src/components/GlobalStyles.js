@@ -18,10 +18,14 @@ const GlobalStyles = createGlobalStyle`
         &::-webkit-scrollbar-thumb{
             background-color: darkorange;
         }
+        &::-webkit-scrollbar-track {
+    background: white;
+        }
     }
     body{
         font-family: 'Poppins', sans-serif;
         width: 100%;
+        background-color: #000000
     }
     h1{
         font-family: 'Sonsie One', cursive;
@@ -49,6 +53,14 @@ const GlobalStyles = createGlobalStyle`
     span {
         color: darkorange
     }
+    img{
+        display: block
+    }
+    input{
+        font-weight: bold;
+    font-family: 'Dhurjati', sans-serif;
+    }
+    
 `;
 
 export default GlobalStyles;

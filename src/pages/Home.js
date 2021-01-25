@@ -1,71 +1,100 @@
 import React, { useEffect } from 'react';
+import GameDetail from '../components/GameDetail';
 //Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { loadGames } from '../actions/gamesAction';
-// sugar, spice, and everything nice
-import styled from 'styled-components';
-import { motion } from 'framer-motion';
-//
+//Components
 import Game from '../components/Game';
+//Styling and Animation
+import styled from 'styled-components';
+import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
+import { fadeIn } from '../animations';
 
 const Home = () => {
-  // Fetch
-  const dispatch = useDispatch();
+  //get the current location
+  const location = useLocation();
+  const pathId = location.pathname.split('/')[2];
 
+  //FETCH GAMES
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadGames());
   }, [dispatch]);
-
-  // Get data
-  const { popular, newGames, upcoming } = useSelector((state) => state.games);
-
-  //
+  //Get that data back
+  const { popular, newGames, upcoming, searched } = useSelector(
+    (state) => state.games
+  );
   return (
-    <GameArchive>
-      <h2>Popular Games</h2>
-      <Games>
-        {popular.map((game) => (
-          <Game
-            name={game.name}
-            released={game.released}
-            id={game.id}
-            image={game.background_image}
-            key={game.id}
-          />
-        ))}
-      </Games>
-
-      <h2>Upcoming Games</h2>
-      <Games>
-        {upcoming.map((game) => (
-          <Game
-            name={game.name}
-            released={game.released}
-            id={game.id}
-            image={game.background_image}
-            key={game.id}
-          />
-        ))}
-      </Games>
-
-      <h2>New Releases</h2>
-      <Games>
-        {newGames.map((game) => (
-          <Game
-            name={game.name}
-            released={game.released}
-            id={game.id}
-            image={game.background_image}
-            key={game.id}
-          />
-        ))}
-      </Games>
-    </GameArchive>
+    <GameList variants={fadeIn} initial='hidden' animate='show'>
+      <AnimateSharedLayout type='crossfade'>
+        <AnimatePresence>
+          {pathId && <GameDetail pathId={pathId} />}
+        </AnimatePresence>
+        {searched.length ? (
+          <div className='searched'>
+            <h2>Searched Games</h2>
+            <Games>
+              {searched.map((game) => (
+                <Game
+                  name={game.name}
+                  released={game.released}
+                  id={game.id}
+                  image={game.background_image}
+                  key={game.id}
+                />
+              ))}
+            </Games>
+          </div>
+        ) : (
+          ''
+        )}
+        <h2>Popular Games</h2>
+        <Games>
+          {popular.map((game) => (
+            <Game
+              name={game.name}
+              released={game.released}
+              id={game.id}
+              image={game.background_image}
+              key={game.id}
+            />
+          ))}
+        </Games>
+        <h2>Upcoming Games</h2>
+        <Games>
+          {upcoming.map((game) => (
+            <Game
+              name={game.name}
+              released={game.released}
+              id={game.id}
+              image={game.background_image}
+              key={game.id}
+            />
+          ))}
+        </Games>
+        <h2>New Games</h2>
+        <Games>
+          {newGames.map((game) => (
+            <Game
+              name={game.name}
+              released={game.released}
+              id={game.id}
+              image={game.background_image}
+              key={game.id}
+            />
+          ))}
+        </Games>
+      </AnimateSharedLayout>
+    </GameList>
   );
 };
 
-const GameArchive = styled(motion.div)`
+const GameList = styled(motion.div)`
   padding: 0rem 5rem;
+  h2:first-child {
+    padding: 1rem 0rem;
+  }
   h2 {
     padding: 5rem 0rem;
   }
